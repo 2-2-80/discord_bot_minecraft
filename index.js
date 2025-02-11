@@ -14,6 +14,8 @@ for (const file of commandFiles) {
     commands[command.data.name] = command
 }
 
+let SERVER_IP = "127.0.0.1";
+
 client.once("ready", async () => {
   const data = []
   for (const commandName in commands) {
@@ -24,15 +26,19 @@ client.once("ready", async () => {
 
   try {
     const response = await axios.get("https://ipinfo.io/json");
-    const ip = response.data.ip;
+    SERVER_IP = response.data.ip; // 取得したIPを変数に格納
+    client.SERVER_IP = SERVER_IP; // クライアントオブジェクトにも保存
+
     client.user.setPresence({
-    activities: [{ name: `IP: ${ip}`, type: 4 }], // type: 4 がカスタム
-    status: "online", // online, idle, dnd, invisible
-  });
-    console.log(`IPアドレスをステータスに設定: ${ip}`);
+      activities: [{ name: `IP: ${SERVER_IP}`, type: 4 }],
+      status: "online",
+    });
+
+    console.log(`IPアドレスをステータスに設定: ${SERVER_IP}`);
   } catch (error) {
     console.error("IPアドレスの取得に失敗しました:", error);
   }
+});
 });
 client.on("interactionCreate", async (interaction) => {
     if (!interaction.isCommand()) {
