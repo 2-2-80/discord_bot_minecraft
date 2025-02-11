@@ -1,30 +1,20 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { status } = require("minecraft-server-util");
 
+const SERVER_IP = "192.168.1.1";  // 固定IP
+const SERVER_PORT = 25565;        // 固定ポート
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("mcstatus")
-        .setDescription("Minecraftサーバーのステータスを取得する")
-        .addStringOption(option =>
-            option.setName("ip")
-                .setDescription("MinecraftサーバーのIPアドレス")
-                .setRequired(true)
-        )
-        .addIntegerOption(option =>
-            option.setName("port")
-                .setDescription("Minecraftサーバーのポート (デフォルト: 25565)")
-                .setRequired(false)
-        ),
+        .setDescription("Minecraftサーバーのステータスを取得するのです！"),
     
     async execute(interaction) {
-        const host = interaction.options.getString("ip");
-        const port = interaction.options.getInteger("port") || 25565;
-
         try {
-            const response = await status(host, port);
+            const response = await status(SERVER_IP, SERVER_PORT);
             const embed = {
                 color: 0x00ff00,
-                title: `🟢 ${host} のステータス`,
+                title: `🟢 ${SERVER_IP} のステータス`,
                 fields: [
                     { name: "プレイヤー数", value: `${response.players.online} / ${response.players.max}`, inline: true },
                     { name: "バージョン", value: response.version.name, inline: true },
