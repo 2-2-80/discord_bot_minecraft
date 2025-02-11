@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require("discord.js");
 const { status } = require("minecraft-server-util");
 
 module.exports = {
