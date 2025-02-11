@@ -1,15 +1,16 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { status } = require("minecraft-server-util");
 
-const SERVER_IP = "192.168.1.1";  // 固定IP
-const SERVER_PORT = 25565;        // 固定ポート
+const SERVER_PORT = 25565; // ポートは固定
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("mcstatus")
-        .setDescription("Minecraftサーバーのステータスを取得するのです！"),
+        .setDescription("現在の環境の Minecraft サーバーステータスを取得するのです！"),
     
     async execute(interaction) {
+        const SERVER_IP = interaction.client.SERVER_IP || "127.0.0.1"; // クライアントオブジェクトから取得
+
         try {
             const response = await status(SERVER_IP, SERVER_PORT);
             const embed = {
